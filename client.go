@@ -19,12 +19,51 @@ type client struct {
 	err error
 }
 
+func (c *client) showcaseWatching(ctx context.Context) error {
+	methods := []func(context.Context){
+		c.userAnimeListWatching,
+	}
+	for _, m := range methods {
+		m(ctx)
+	}
+	if c.err != nil {
+		return c.err
+	}
+	return nil
+}
+
+func (c *client) showcasePlanToWatch(ctx context.Context) error {
+	methods := []func(context.Context){
+		c.userAnimeListPlanToWatch,
+	}
+	for _, m := range methods {
+		m(ctx)
+	}
+	if c.err != nil {
+		return c.err
+	}
+	return nil
+}
+
+func (c *client) showcaseCompleted(ctx context.Context) error {
+	methods := []func(context.Context){
+		c.userAnimeListCompleted,
+	}
+	for _, m := range methods {
+		m(ctx)
+	}
+	if c.err != nil {
+		return c.err
+	}
+	return nil
+}
+
 func (c *client) showcase(ctx context.Context) error {
 	methods := []func(context.Context){
 		// Uncomment the methods you need to see their results. Run or build
 		// using -tags=debug to see the full HTTP request and response.
 		// c.userMyInfo,
-		// c.animeList,
+		c.animeList,
 		// c.mangaList,
 		// c.animeDetails,
 		// c.mangaDetails,
@@ -34,7 +73,7 @@ func (c *client) showcase(ctx context.Context) error {
 		// c.animeSuggested,
 		// c.animeListForLoop, // Warning: Many requests.
 		// c.updateMyAnimeListStatus,
-		c.userAnimeListWatching,
+		// c.userAnimeListWatching,
 		// c.userAnimeListPlanToWatch,
 		// c.userAnimeListCompleted,
 		// c.deleteMyAnimeListItem,
