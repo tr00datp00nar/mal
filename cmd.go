@@ -10,7 +10,7 @@ import (
 var Cmd = &Z.Cmd{
 	Name:        `mal`,
 	Usage:       `[help]`,
-	Version:     `v0.0.2`,
+	Version:     `v0.0.3`,
 	Copyright:   `Copyright Micah Nadler 2023`,
 	License:     `Apache-2.0`,
 	Summary:     help.S(_mal),
@@ -26,7 +26,7 @@ var Cmd = &Z.Cmd{
 
 var listCmd = &Z.Cmd{
 	Name:        `list`,
-	Version:     `v0.0.2`,
+	Version:     `v0.0.3`,
 	Copyright:   `Copyright Micah Nadler 2023`,
 	License:     `Apache-2.0`,
 	Summary:     help.S(_list),
@@ -46,7 +46,7 @@ var listCmd = &Z.Cmd{
 var planCmd = &Z.Cmd{
 	Name:        `plan`,
 	Usage:       `[help]`,
-	Version:     `v0.0.2`,
+	Version:     `v0.0.3`,
 	Copyright:   `Copyright Micah Nadler 2023`,
 	License:     `Apache-2.0`,
 	Summary:     help.S(_plan),
@@ -64,7 +64,7 @@ var planCmd = &Z.Cmd{
 var doneCmd = &Z.Cmd{
 	Name:        `done`,
 	Usage:       `[help]`,
-	Version:     `v0.0.2`,
+	Version:     `v0.0.3`,
 	Copyright:   `Copyright Micah Nadler 2023`,
 	License:     `Apache-2.0`,
 	Summary:     help.S(_done),

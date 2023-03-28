@@ -9,8 +9,11 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 
+	"github.com/charmbracelet/log"
+	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
 )
 
@@ -20,9 +23,33 @@ import (
 // //     profile, click Edit Profile and select the API tab on the far right.
 // //  2. Click Create ID and submit the form with your application details.
 // const (
-// 	defaultClientID     = "65505fa6cb4f7b56e54681889465a93e"
-// 	defaultClientSecret = "06571ff86fb54628941f7d03a520f2fb4bfb54c1e314f32b0cc8bd68dcf13ed5"
+//
+//	defaultClientID     = "65505fa6cb4f7b56e54681889465a93e"
+//	defaultClientSecret = "06571ff86fb54628941f7d03a520f2fb4bfb54c1e314f32b0cc8bd68dcf13ed5"
+//
 // )
+
+var userHomeDir, _ = os.UserHomeDir()
+var cacheDir = filepath.Join(userHomeDir, ".config/mal")
+var cacheName = filepath.Join(cacheDir, "/mal-token-cache.txt")
+
+type MalConfig struct {
+	ClientId     string `yaml:"mal_client_id"`
+	ClientSecret string `yaml:"mal_client_secret"`
+}
+
+func LoadConfigFile() (config MalConfig, err error) {
+	viper.AddConfigPath(filepath.Clean("$HOME/.config/mal"))
+	viper.SetConfigName("mal")
+	viper.SetConfigType("yaml")
+
+	err = viper.ReadInConfig()
+	if err != nil {
+		log.Error(err)
+	}
+	err = viper.Unmarshal(&config)
+	return
+}
 
 func authenticate(ctx context.Context, clientID, clientSecret, state string) (*http.Client, error) {
 	// Prepare the oauth2 configuration with your application ID, secret, the
@@ -97,8 +124,6 @@ func authenticate(ctx context.Context, clientID, clientSecret, state string) (*h
 
 	return conf.Client(ctx, token), nil
 }
-
-const cacheName = "auth-example-token-cache.txt"
 
 func cacheToken(token oauth2.Token) error {
 	b, err := json.MarshalIndent(token, "", "   ")

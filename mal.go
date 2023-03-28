@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/charmbracelet/log"
 	"github.com/nstratos/go-myanimelist/mal"
 )
 
@@ -30,14 +31,15 @@ func main(arg int) {
 }
 
 func runWatching() error {
+	config, err := LoadConfigFile()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var (
-		clientID     = flag.String("client-id", defaultClientID, "your registered MyAnimeList.net application client ID")
-		clientSecret = flag.String("client-secret", defaultClientSecret, "your registered MyAnimeList.net application client secret; optional if you chose App Type 'other'")
-		// state is a token to protect the user from CSRF attacks. In a web
-		// application, you should provide a non-empty string and validate that
-		// it matches the state query parameter on the redirect URL callback
-		// after the MyAnimeList authentication. It can stay empty here.
-		state = flag.String("state", "", "token to protect against CSRF attacks")
+		clientID     = flag.String("client-id", config.ClientId, "your registered MyAnimeList.net application client ID")
+		clientSecret = flag.String("client-secret", config.ClientSecret, "your registered MyAnimeList.net application client secret; optional if you chose App Type 'other'")
+		state        = flag.String("state", "", "token to protect against CSRF attacks")
 	)
 	flag.Parse()
 
@@ -53,19 +55,18 @@ func runWatching() error {
 	}
 
 	return c.showcaseWatching(ctx)
-	// return c.showcasePlanToWatch(ctx)
-	// return c.showcaseCompleted(ctx)
 }
 
 func runPlanToWatch() error {
+	config, err := LoadConfigFile()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var (
-		clientID     = flag.String("client-id", defaultClientID, "your registered MyAnimeList.net application client ID")
-		clientSecret = flag.String("client-secret", defaultClientSecret, "your registered MyAnimeList.net application client secret; optional if you chose App Type 'other'")
-		// state is a token to protect the user from CSRF attacks. In a web
-		// application, you should provide a non-empty string and validate that
-		// it matches the state query parameter on the redirect URL callback
-		// after the MyAnimeList authentication. It can stay empty here.
-		state = flag.String("state", "", "token to protect against CSRF attacks")
+		clientID     = flag.String("client-id", config.ClientId, "your registered MyAnimeList.net application client ID")
+		clientSecret = flag.String("client-secret", config.ClientSecret, "your registered MyAnimeList.net application client secret; optional if you chose App Type 'other'")
+		state        = flag.String("state", "", "token to protect against CSRF attacks")
 	)
 	flag.Parse()
 
@@ -84,14 +85,15 @@ func runPlanToWatch() error {
 }
 
 func runCompleted() error {
+	config, err := LoadConfigFile()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var (
-		clientID     = flag.String("client-id", defaultClientID, "your registered MyAnimeList.net application client ID")
-		clientSecret = flag.String("client-secret", defaultClientSecret, "your registered MyAnimeList.net application client secret; optional if you chose App Type 'other'")
-		// state is a token to protect the user from CSRF attacks. In a web
-		// application, you should provide a non-empty string and validate that
-		// it matches the state query parameter on the redirect URL callback
-		// after the MyAnimeList authentication. It can stay empty here.
-		state = flag.String("state", "", "token to protect against CSRF attacks")
+		clientID     = flag.String("client-id", config.ClientId, "your registered MyAnimeList.net application client ID")
+		clientSecret = flag.String("client-secret", config.ClientSecret, "your registered MyAnimeList.net application client secret; optional if you chose App Type 'other'")
+		state        = flag.String("state", "", "token to protect against CSRF attacks")
 	)
 	flag.Parse()
 

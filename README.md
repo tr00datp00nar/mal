@@ -23,20 +23,13 @@ In order to create a client ID and secret for your application:
 1. Navigate to https://myanimelist.net/apiconfig or go to your MyAnimeList profile, click Edit Profile and select the API tab on the far right.
 2. Click Create ID and submit the form with your application details.
 
-You will need to create a file `credentials.go` in the same directory as the source code with the following content:
+You will need to create a config file `$HOME/.config/mal/mal.yaml` with the following content:
 
-```bash
-package mal
-
-const (
-	defaultClientID     = "YOUR-CLIENT-ID"
-	defaultClientSecret = "YOUR-CLIENT-SECRET"
-)
-
+```yaml
+	client_id: "YOUR-CLIENT-ID"
+	client_secret: "YOUR-CLIENT-SECRET"
 ```
-
-## CAUTION
-This branch is incomplete. Currently, it can only be used by cloning this repository to a location on your system and using `go install` to compile the binary with your credential information.
+This config location is currently hardcoded. PRs welcome if you want to place your configuration elsewhere.
 
 ## Resources
 To learn more about Bonzai stateful command trees: https://github.com/rwxrob/bonzai
@@ -47,7 +40,5 @@ To see the original Bonzai stateful command tree z: https://github.com/rwxrob/z
 
 ## To-do
 
-- [ ] Better way to manage credentials
+- [x] Better way to manage credentials
 - [ ] Create some kind of nice looking UI to display to returned API data.
-- [ ] Better logging
-- [ ] Better documentation
