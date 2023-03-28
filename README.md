@@ -1,6 +1,6 @@
 # :deciduous_tree: Mal
 
-This is mal, a tool to interact with MyAnimeList.net. I have put it into a command branch for inclusion into my c Bonzai stateful command tree.
+This is `mal`, a tool to interact with MyAnimeList.net. I have put it into a command branch for inclusion into my c Bonzai stateful command tree.
 
 This branch is still very much a work in progress. PRs welcome.
 
@@ -29,7 +29,7 @@ You will need to create a config file `$HOME/.config/mal/mal.yaml` with the foll
 	client_id: "YOUR-CLIENT-ID"
 	client_secret: "YOUR-CLIENT-SECRET"
 ```
-This config location is currently hardcoded. PRs welcome if you want to place your configuration elsewhere.
+This config location is currently hardcoded. PRs welcome to place configuration elsewhere.
 
 ## Resources
 To learn more about Bonzai stateful command trees: https://github.com/rwxrob/bonzai
@@ -40,5 +40,6 @@ To see the original Bonzai stateful command tree z: https://github.com/rwxrob/z
 
 ## To-do
 
-- [x] Better way to manage credentials
+- [ ] Allow user to define custom configuration and token cache locations.
+- [ ] Allow user to change filters/sorting.
 - [ ] Create some kind of nice looking UI to display to returned API data.
