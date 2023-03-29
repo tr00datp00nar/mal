@@ -17,18 +17,6 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// // In order to create a client ID and secret for your application:
-// //
-// //  1. Navigate to https://myanimelist.net/apiconfig or go to your MyAnimeList
-// //     profile, click Edit Profile and select the API tab on the far right.
-// //  2. Click Create ID and submit the form with your application details.
-// const (
-//
-//	defaultClientID     = "65505fa6cb4f7b56e54681889465a93e"
-//	defaultClientSecret = "06571ff86fb54628941f7d03a520f2fb4bfb54c1e314f32b0cc8bd68dcf13ed5"
-//
-// )
-
 var userHomeDir, _ = os.UserHomeDir()
 var cacheDir = filepath.Join(userHomeDir, ".config/mal")
 var cacheName = filepath.Join(cacheDir, "/mal-token-cache.txt")
