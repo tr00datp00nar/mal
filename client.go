@@ -4,8 +4,10 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"unicode"
 
 	"github.com/nstratos/go-myanimelist/mal"
+	"github.com/rwxrob/to"
 )
 
 // client has methods showcasing the usage of the different MyAnimeList API
@@ -58,6 +60,69 @@ func (c *client) showcaseCompleted(ctx context.Context) error {
 	return nil
 }
 
+func (c *client) userAnimeListWatching(ctx context.Context) {
+	if c.err != nil {
+		return
+	}
+	anime, _, err := c.User.AnimeList(ctx, "@me",
+		mal.Fields{"list_status", "num_episodes"},
+		mal.AnimeStatusWatching,
+		mal.SortAnimeListByListUpdatedAt,
+		mal.Limit(100),
+	)
+	if err != nil {
+		c.err = err
+		return
+	}
+
+	for _, a := range anime {
+		title := EllipticalTruncate("📺 "+a.Anime.Title, 40)
+		episodeCount := "👀 Watched: " + to.String(a.Status.NumEpisodesWatched) + "/" + to.String(a.Anime.NumEpisodes)
+		fmt.Printf("%-50s|%-40s\n", title, episodeCount)
+	}
+}
+
+func (c *client) userAnimeListPlanToWatch(ctx context.Context) {
+	if c.err != nil {
+		return
+	}
+	anime, _, err := c.User.AnimeList(ctx, "@me",
+		mal.Fields{"list_status"},
+		mal.AnimeStatusPlanToWatch,
+		mal.SortAnimeListByListUpdatedAt,
+		mal.Limit(100),
+	)
+	if err != nil {
+		c.err = err
+		return
+	}
+	for _, a := range anime {
+		title := EllipticalTruncate("📺 "+a.Anime.Title, 40)
+		fmt.Printf("%s\n", title)
+	}
+}
+
+func (c *client) userAnimeListCompleted(ctx context.Context) {
+	if c.err != nil {
+		return
+	}
+	anime, _, err := c.User.AnimeList(ctx, "@me",
+		mal.Fields{"list_status"},
+		mal.AnimeStatusCompleted,
+		mal.SortAnimeListByListUpdatedAt,
+		mal.Limit(100),
+	)
+	if err != nil {
+		c.err = err
+		return
+	}
+	for _, a := range anime {
+		title := "📺 " + a.Anime.Title
+		fmt.Printf("%s\n", title)
+	}
+}
+
+// ────────────────────────────────────────────────────────────
 func (c *client) showcase(ctx context.Context) error {
 	methods := []func(context.Context){
 		// Uncomment the methods you need to see their results. Run or build
@@ -252,63 +317,6 @@ func (c *client) animeListForLoop(ctx context.Context) {
 		if offset == 0 {
 			break
 		}
-	}
-}
-
-func (c *client) userAnimeListWatching(ctx context.Context) {
-	if c.err != nil {
-		return
-	}
-	anime, _, err := c.User.AnimeList(ctx, "@me",
-		mal.Fields{"list_status"},
-		mal.AnimeStatusWatching,
-		mal.SortAnimeListByListUpdatedAt,
-		mal.Limit(100),
-	)
-	if err != nil {
-		c.err = err
-		return
-	}
-	for _, a := range anime {
-		fmt.Printf("ID: %5d, Status: %15q, Episodes Watched: %3d %s\n", a.Anime.ID, a.Status.Status, a.Status.NumEpisodesWatched, a.Anime.Title)
-	}
-}
-
-func (c *client) userAnimeListPlanToWatch(ctx context.Context) {
-	if c.err != nil {
-		return
-	}
-	anime, _, err := c.User.AnimeList(ctx, "@me",
-		mal.Fields{"list_status"},
-		mal.AnimeStatusPlanToWatch,
-		mal.SortAnimeListByListUpdatedAt,
-		mal.Limit(100),
-	)
-	if err != nil {
-		c.err = err
-		return
-	}
-	for _, a := range anime {
-		fmt.Printf("ID: %5d, %s\n", a.Anime.ID, a.Anime.Title)
-	}
-}
-
-func (c *client) userAnimeListCompleted(ctx context.Context) {
-	if c.err != nil {
-		return
-	}
-	anime, _, err := c.User.AnimeList(ctx, "@me",
-		mal.Fields{"list_status"},
-		mal.AnimeStatusCompleted,
-		mal.SortAnimeListByListUpdatedAt,
-		mal.Limit(100),
-	)
-	if err != nil {
-		c.err = err
-		return
-	}
-	for _, a := range anime {
-		fmt.Printf("ID: %5d, %s\n", a.Anime.ID, a.Anime.Title)
 	}
 }
 
@@ -525,3 +533,26 @@ func (c *client) forumTopicDetails(ctx context.Context) {
 		fmt.Printf("Post: %2d created by %q\n", p.Number, p.CreatedBy.Name)
 	}
 }
+
+func EllipticalTruncate(text string, maxLen int) string {
+	lastSpaceIx := maxLen
+	len := 0
+	for i, r := range text {
+		if unicode.IsSpace(r) {
+			lastSpaceIx = i
+		}
+		len++
+		if len > maxLen {
+			return text[:lastSpaceIx] + "..."
+		}
+	}
+	// If here, string is shorter or equal to maxLen
+	return text
+}
+
+// func truncateString(s string, max int) string {
+// 	if max > len(s) {
+// 		return s
+// 	}
+// 	return s[:strings.LastIndexAny(s[:max], " .,:;-")]
+// }

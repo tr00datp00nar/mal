@@ -3,8 +3,6 @@ package mal
 import (
 	"context"
 	"flag"
-	"fmt"
-	"os"
 
 	"github.com/charmbracelet/log"
 	"github.com/nstratos/go-myanimelist/mal"
@@ -14,18 +12,15 @@ func main(arg int) {
 	switch arg {
 	case 1:
 		if err := runWatching(); err != nil {
-			fmt.Fprintf(os.Stderr, "error: %v\n", err)
-			os.Exit(1)
+			log.Fatal(err)
 		}
 	case 2:
 		if err := runPlanToWatch(); err != nil {
-			fmt.Fprintf(os.Stderr, "error: %v\n", err)
-			os.Exit(1)
+			log.Fatal(err)
 		}
 	case 3:
 		if err := runCompleted(); err != nil {
-			fmt.Fprintf(os.Stderr, "error: %v\n", err)
-			os.Exit(1)
+			log.Fatal(err)
 		}
 	}
 }
