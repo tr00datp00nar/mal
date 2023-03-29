@@ -26,8 +26,8 @@ In order to create a client ID and secret for your application:
 You will need to create a config file `$HOME/.config/mal/mal.yaml` with the following content:
 
 ```yaml
-	client_id: "YOUR-CLIENT-ID"
-	client_secret: "YOUR-CLIENT-SECRET"
+client_id: "YOUR-CLIENT-ID"
+client_secret: "YOUR-CLIENT-SECRET"
 ```
 This config location is currently hardcoded. PRs welcome to place configuration elsewhere.
 
