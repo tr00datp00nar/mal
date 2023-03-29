@@ -65,7 +65,7 @@ func (c *client) userAnimeListWatching(ctx context.Context) {
 		return
 	}
 	anime, _, err := c.User.AnimeList(ctx, "@me",
-		mal.Fields{"list_status", "num_episodes"},
+		mal.Fields{"my_list_status{comments}", "num_episodes"},
 		mal.AnimeStatusWatching,
 		mal.SortAnimeListByListUpdatedAt,
 		mal.Limit(100),
@@ -78,7 +78,14 @@ func (c *client) userAnimeListWatching(ctx context.Context) {
 	for _, a := range anime {
 		title := EllipticalTruncate("📺 "+a.Anime.Title, 40)
 		episodeCount := "👀 Watched: " + to.String(a.Status.NumEpisodesWatched) + "/" + to.String(a.Anime.NumEpisodes)
-		fmt.Printf("%-50s|%-40s\n", title, episodeCount)
+		// n := a.Anime.MyListStatus.Comments
+		comments := strings.Split(a.Anime.MyListStatus.Comments, "<br />")
+		comment := strings.Trim(fmt.Sprint(comments), "[]")
+		if comment != "" {
+			fmt.Printf("%-50s|%-10s\n%s\n", title, episodeCount, comment)
+		} else {
+			fmt.Printf("%-50s|%-10s\n", title, episodeCount)
+		}
 	}
 }
 
