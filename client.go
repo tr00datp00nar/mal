@@ -77,8 +77,7 @@ func (c *client) userAnimeListWatching(ctx context.Context) {
 
 	for _, a := range anime {
 		title := EllipticalTruncate("📺 "+a.Anime.Title, 40)
-		episodeCount := "👀 Watched: " + to.String(a.Status.NumEpisodesWatched) + "/" + to.String(a.Anime.NumEpisodes)
-		// n := a.Anime.MyListStatus.Comments
+		episodeCount := "👀 Watched: " + to.String(a.Anime.MyListStatus.NumEpisodesWatched) + "/" + to.String(a.Anime.NumEpisodes)
 		comments := strings.Split(a.Anime.MyListStatus.Comments, "<br />")
 		comment := strings.Trim(fmt.Sprint(comments), "[]")
 		if comment != "" {
