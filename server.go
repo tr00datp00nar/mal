@@ -17,6 +17,11 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// TODO: Move from using viper for configuration to the rwxrob/conf package instead.
+//		c := conf.C(Id: `bar`, Dir: `testdata`, File: `config.yaml`)
+//		clientId := c.Query(.mal.client_id)
+//		clientId := c.Query(.mal.client_secret)
+
 var userHomeDir, _ = os.UserHomeDir()
 var cacheDir = filepath.Join(userHomeDir, ".config/mal")
 var cacheName = filepath.Join(cacheDir, "/mal-token-cache.txt")
