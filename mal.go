@@ -22,6 +22,11 @@ func main(arg int) {
 		if err := runCompleted(); err != nil {
 			log.Fatal(err)
 		}
+	default:
+		if err := runWatching(); err != nil {
+			log.Fatal(err)
+		}
+
 	}
 }
 

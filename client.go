@@ -6,6 +6,9 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/ktr0731/go-fuzzyfinder"
+
+	"github.com/charmbracelet/log"
 	"github.com/nstratos/go-myanimelist/mal"
 	"github.com/rwxrob/to"
 )
@@ -65,7 +68,7 @@ func (c *client) userAnimeListWatching(ctx context.Context) {
 		return
 	}
 	anime, _, err := c.User.AnimeList(ctx, "@me",
-		mal.Fields{"my_list_status{comments}", "num_episodes"},
+		mal.Fields{"my_list_status{comments}", "num_episodes", "synopsis"},
 		mal.AnimeStatusWatching,
 		mal.SortAnimeListByListUpdatedAt,
 		mal.Limit(100),
@@ -75,28 +78,35 @@ func (c *client) userAnimeListWatching(ctx context.Context) {
 		return
 	}
 
-	fmt.Println("---------------------------------------------")
-	for _, a := range anime {
-		title := "📺 " + a.Anime.Title
-		episodeCount := "👀 Watched: " + to.String(a.Anime.MyListStatus.NumEpisodesWatched) + "/" + to.String(a.Anime.NumEpisodes)
-		comments := strings.Split(a.Anime.MyListStatus.Comments, "<br />")
-		comment := strings.Trim(fmt.Sprint(comments), "[]")
-		if comment != "" {
-			fmt.Printf("%-s\n%-s\n  %s\n", title, episodeCount, comment)
-			fmt.Println("---------------------------------------------")
-		} else {
-			fmt.Printf("%-s\n%-s\n", title, episodeCount)
-			fmt.Println("---------------------------------------------")
-		}
+	idx, err := fuzzyfinder.FindMulti(
+		anime,
+		func(i int) string {
+			return to.String(anime[i].Anime.Title)
+		},
+		fuzzyfinder.WithPreviewWindow(func(i, w, h int) string {
+
+			if i == -1 {
+				return ""
+			}
+
+			syn, _ := to.Wrapped(anime[i].Anime.Synopsis, 72)
+			episodeCount := "👀 Watched: " + to.String(anime[i].Anime.MyListStatus.NumEpisodesWatched) + "/" + to.String(anime[i].Anime.NumEpisodes)
+
+			return fmt.Sprintf("📺  %s\n%s\n%s\n\nSynopsis:\n%v\n",
+				anime[i].Anime.Title,
+				anime[i].Anime.MyListStatus.Comments,
+				episodeCount,
+				syn)
+		}))
+	if err != nil {
+		log.Fatal(err)
 	}
+	log.Infof("Selected: %v\n", idx)
 }
 
 func (c *client) userAnimeListPlanToWatch(ctx context.Context) {
-	if c.err != nil {
-		return
-	}
 	anime, _, err := c.User.AnimeList(ctx, "@me",
-		mal.Fields{"list_status"},
+		mal.Fields{"my_list_status{comments}", "list_status", "synopsis"},
 		mal.AnimeStatusPlanToWatch,
 		mal.SortAnimeListByListUpdatedAt,
 		mal.Limit(100),
@@ -105,10 +115,26 @@ func (c *client) userAnimeListPlanToWatch(ctx context.Context) {
 		c.err = err
 		return
 	}
-	for _, a := range anime {
-		title := EllipticalTruncate("📺 "+a.Anime.Title, 40)
-		fmt.Printf("%s\n", title)
+
+	idx, err := fuzzyfinder.FindMulti(
+		anime,
+		func(i int) string {
+			return to.String(anime[i].Anime.Title)
+		},
+		fuzzyfinder.WithPreviewWindow(func(i, w, h int) string {
+			if i == -1 {
+				return ""
+			}
+			syn, _ := to.Wrapped(anime[i].Anime.Synopsis, 72)
+			return fmt.Sprintf("📺  %s\n%s\n\nSynopsis:\n%v\n",
+				anime[i].Anime.Title,
+				anime[i].Anime.MyListStatus.Comments,
+				syn)
+		}))
+	if err != nil {
+		log.Fatal(err)
 	}
+	log.Infof("Selected: %v\n", idx)
 }
 
 func (c *client) userAnimeListCompleted(ctx context.Context) {
@@ -116,7 +142,7 @@ func (c *client) userAnimeListCompleted(ctx context.Context) {
 		return
 	}
 	anime, _, err := c.User.AnimeList(ctx, "@me",
-		mal.Fields{"list_status"},
+		mal.Fields{"my_list_status{comments}", "list_status", "synopsis"},
 		mal.AnimeStatusCompleted,
 		mal.SortAnimeListByListUpdatedAt,
 		mal.Limit(100),
@@ -125,10 +151,25 @@ func (c *client) userAnimeListCompleted(ctx context.Context) {
 		c.err = err
 		return
 	}
-	for _, a := range anime {
-		title := "📺 " + a.Anime.Title
-		fmt.Printf("%s\n", title)
+	idx, err := fuzzyfinder.FindMulti(
+		anime,
+		func(i int) string {
+			return to.String(anime[i].Anime.Title)
+		},
+		fuzzyfinder.WithPreviewWindow(func(i, w, h int) string {
+			if i == -1 {
+				return ""
+			}
+			syn, _ := to.Wrapped(anime[i].Anime.Synopsis, 72)
+			return fmt.Sprintf("%s\n%s\n\n%s\n",
+				anime[i].Anime.Title,
+				anime[i].Anime.MyListStatus.Comments,
+				syn)
+		}))
+	if err != nil {
+		log.Fatal(err)
 	}
+	log.Infof("Selected: %v\n", idx)
 }
 
 // ────────────────────────────────────────────────────────────
