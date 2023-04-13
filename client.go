@@ -6,6 +6,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/atotto/clipboard"
 	"github.com/ktr0731/go-fuzzyfinder"
 
 	"github.com/charmbracelet/log"
@@ -63,6 +64,19 @@ func (c *client) showcaseCompleted(ctx context.Context) error {
 	return nil
 }
 
+func (c *client) showcaseMangaList(ctx context.Context) error {
+	methods := []func(context.Context){
+		c.userMangaList,
+	}
+	for _, m := range methods {
+		m(ctx)
+	}
+	if c.err != nil {
+		return c.err
+	}
+	return nil
+}
+
 func (c *client) userAnimeListWatching(ctx context.Context) {
 	if c.err != nil {
 		return
@@ -101,7 +115,11 @@ func (c *client) userAnimeListWatching(ctx context.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Infof("Selected: %v\n", idx)
+	for _, indx := range idx {
+		sel := anime[indx].Anime.Title
+		clipboard.WriteAll(sel)
+		fmt.Println(sel)
+	}
 }
 
 func (c *client) userAnimeListPlanToWatch(ctx context.Context) {
@@ -134,7 +152,11 @@ func (c *client) userAnimeListPlanToWatch(ctx context.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Infof("Selected: %v\n", idx)
+	for _, indx := range idx {
+		sel := anime[indx].Anime.Title
+		clipboard.WriteAll(sel)
+		fmt.Println(sel)
+	}
 }
 
 func (c *client) userAnimeListCompleted(ctx context.Context) {
@@ -169,44 +191,53 @@ func (c *client) userAnimeListCompleted(ctx context.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Infof("Selected: %v\n", idx)
+	for _, indx := range idx {
+		sel := anime[indx].Anime.Title
+		clipboard.WriteAll(sel)
+		fmt.Println(sel)
+	}
+}
+
+func (c *client) userMangaList(ctx context.Context) {
+	if c.err != nil {
+		return
+	}
+	manga, _, err := c.User.MangaList(ctx, "@me",
+		mal.SortMangaListByListUpdatedAt,
+		mal.Fields{"my_list_status{comments}"},
+		mal.Limit(100),
+		mal.Offset(0),
+	)
+	if err != nil {
+		c.err = err
+		return
+	}
+	idx, err := fuzzyfinder.FindMulti(
+		manga,
+		func(i int) string {
+			return to.String(manga[i].Manga.Title)
+		},
+		fuzzyfinder.WithPreviewWindow(func(i, w, h int) string {
+			if i == -1 {
+				return ""
+			}
+			syn, _ := to.Wrapped(manga[i].Manga.Synopsis, 72)
+			return fmt.Sprintf("%s\n%s\n\n%s\n",
+				manga[i].Manga.Title,
+				manga[i].Manga.MyListStatus.Comments,
+				syn)
+		}))
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, indx := range idx {
+		sel := manga[indx].Manga.Title
+		clipboard.WriteAll(sel)
+		fmt.Println(sel)
+	}
 }
 
 // ────────────────────────────────────────────────────────────
-func (c *client) showcase(ctx context.Context) error {
-	methods := []func(context.Context){
-		// Uncomment the methods you need to see their results. Run or build
-		// using -tags=debug to see the full HTTP request and response.
-		// c.userMyInfo,
-		c.animeList,
-		// c.mangaList,
-		// c.animeDetails,
-		// c.mangaDetails,
-		// c.animeRanking,
-		// c.mangaRanking,
-		// c.animeSeasonal,
-		// c.animeSuggested,
-		// c.animeListForLoop, // Warning: Many requests.
-		// c.updateMyAnimeListStatus,
-		// c.userAnimeListWatching,
-		// c.userAnimeListPlanToWatch,
-		// c.userAnimeListCompleted,
-		// c.deleteMyAnimeListItem,
-		// c.updateMyMangaListStatus,
-		// c.userMangaList,
-		// c.deleteMyMangaListItem,
-		// c.forumBoards,
-		// c.forumTopics,
-		// c.forumTopicDetails,
-	}
-	for _, m := range methods {
-		m(ctx)
-	}
-	if c.err != nil {
-		return c.err
-	}
-	return nil
-}
 
 func (c *client) userMyInfo(ctx context.Context) {
 	if c.err != nil {
@@ -367,25 +398,6 @@ func (c *client) animeListForLoop(ctx context.Context) {
 		if offset == 0 {
 			break
 		}
-	}
-}
-
-func (c *client) userMangaList(ctx context.Context) {
-	if c.err != nil {
-		return
-	}
-	manga, _, err := c.User.MangaList(ctx, "@me",
-		mal.SortMangaListByListScore,
-		mal.Fields{"list_status{comments, tags}"},
-		mal.Limit(5),
-		mal.Offset(0),
-	)
-	if err != nil {
-		c.err = err
-		return
-	}
-	for _, m := range manga {
-		fmt.Printf("ID: %5d, Status: %15q, Volumes Read: %3d, Chapters Read: %3d %s\n", m.Manga.ID, m.Status.Status, m.Status.NumVolumesRead, m.Status.NumChaptersRead, m.Manga.Title)
 	}
 }
 

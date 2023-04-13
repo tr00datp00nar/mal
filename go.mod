@@ -3,6 +3,7 @@ module github.com/tr00datp00nar/mal
 go 1.19
 
 require (
+	github.com/atotto/clipboard v0.1.4
 	github.com/charmbracelet/log v0.2.1
 	github.com/ktr0731/go-fuzzyfinder v0.7.0
 	github.com/nstratos/go-myanimelist v0.9.4

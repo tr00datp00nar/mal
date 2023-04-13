@@ -1,8 +1,6 @@
 package mal
 
 import (
-	"strconv"
-
 	Z "github.com/rwxrob/bonzai/z"
 	"github.com/rwxrob/help"
 )
@@ -20,6 +18,7 @@ var Cmd = &Z.Cmd{
 		doneCmd,
 		listCmd,
 		planCmd,
+		mangaCmd,
 		help.Cmd,
 	},
 }
@@ -37,8 +36,7 @@ var listCmd = &Z.Cmd{
 	},
 
 	Call: func(_ *Z.Cmd, args ...string) error {
-		i, _ := strconv.Atoi("1")
-		main(i)
+		runWatching()
 		return nil
 	},
 }
@@ -55,8 +53,7 @@ var planCmd = &Z.Cmd{
 	Commands: []*Z.Cmd{help.Cmd},
 
 	Call: func(_ *Z.Cmd, args ...string) error {
-		i, _ := strconv.Atoi("2")
-		main(i)
+		runPlanToWatch()
 		return nil
 	},
 }
@@ -73,8 +70,24 @@ var doneCmd = &Z.Cmd{
 	Commands: []*Z.Cmd{help.Cmd},
 
 	Call: func(_ *Z.Cmd, args ...string) error {
-		i, _ := strconv.Atoi("3")
-		main(i)
+		runCompleted()
+		return nil
+	},
+}
+
+var mangaCmd = &Z.Cmd{
+	Name:      `manga`,
+	Usage:     `[help]`,
+	Version:   `v0.0.1`,
+	Copyright: `Copyright Micah Nadler 2023`,
+	License:   `Apache-2.0`,
+	// Summary:     help.S(_manga),
+	// Description:  help.D(_manga),
+
+	Commands: []*Z.Cmd{help.Cmd},
+
+	Call: func(_ *Z.Cmd, args ...string) error {
+		runMangaList()
 		return nil
 	},
 }
