@@ -7,7 +7,7 @@ import (
 
 var Cmd = &Z.Cmd{
 	Name:        `mal`,
-	Usage:       `[help]`,
+	Usage:       `COMMAND`,
 	Version:     `v0.1.0`,
 	Copyright:   `Copyright Micah Nadler 2023`,
 	License:     `Apache-2.0`,
@@ -24,13 +24,13 @@ var Cmd = &Z.Cmd{
 // ─────────────────────────── Anime ───────────────────────────────
 
 var animeCmd = &Z.Cmd{
-	Name:      `anime`,
-	Usage:     `[help]`,
-	Version:   `v0.0.3`,
-	Copyright: `Copyright Micah Nadler 2023`,
-	License:   `Apache-2.0`,
-	// Summary:     help.S(_anime),
-	// Description: help.D(_anime),
+	Name:        `anime`,
+	Usage:       `COMMAND`,
+	Version:     `v0.0.3`,
+	Copyright:   `Copyright Micah Nadler 2023`,
+	License:     `Apache-2.0`,
+	Summary:     help.S(_anime),
+	Description: help.D(_anime),
 
 	Commands: []*Z.Cmd{
 		animeDoneCmd,
@@ -42,15 +42,14 @@ var animeCmd = &Z.Cmd{
 
 var animeListCmd = &Z.Cmd{
 	Name:        `list`,
+	Usage:       `[help]`,
 	Version:     `v0.0.3`,
 	Copyright:   `Copyright Micah Nadler 2023`,
 	License:     `Apache-2.0`,
-	Summary:     help.S(_list),
-	Description: help.D(_list),
+	Summary:     help.S(_animeList),
+	Description: help.D(_animeList),
 
-	Commands: []*Z.Cmd{
-		help.Cmd,
-	},
+	Commands: []*Z.Cmd{help.Cmd},
 
 	Call: func(_ *Z.Cmd, args ...string) error {
 		runWatching()
@@ -64,8 +63,8 @@ var animePlanCmd = &Z.Cmd{
 	Version:     `v0.0.3`,
 	Copyright:   `Copyright Micah Nadler 2023`,
 	License:     `Apache-2.0`,
-	Summary:     help.S(_plan),
-	Description: help.D(_plan),
+	Summary:     help.S(_animePlan),
+	Description: help.D(_animePlan),
 
 	Commands: []*Z.Cmd{help.Cmd},
 
@@ -81,8 +80,8 @@ var animeDoneCmd = &Z.Cmd{
 	Version:     `v0.0.3`,
 	Copyright:   `Copyright Micah Nadler 2023`,
 	License:     `Apache-2.0`,
-	Summary:     help.S(_done),
-	Description: help.D(_done),
+	Summary:     help.S(_animeDone),
+	Description: help.D(_animeDone),
 
 	Commands: []*Z.Cmd{help.Cmd},
 
@@ -95,13 +94,13 @@ var animeDoneCmd = &Z.Cmd{
 // ─────────────────────────── Manga ───────────────────────────────
 
 var mangaCmd = &Z.Cmd{
-	Name:      `manga`,
-	Usage:     `[help]`,
-	Version:   `v0.0.1`,
-	Copyright: `Copyright Micah Nadler 2023`,
-	License:   `Apache-2.0`,
-	// Summary:     help.S(_manga),
-	// Description:  help.D(_manga),
+	Name:        `manga`,
+	Usage:       `COMMAND`,
+	Version:     `v0.0.1`,
+	Copyright:   `Copyright Micah Nadler 2023`,
+	License:     `Apache-2.0`,
+	Summary:     help.S(_manga),
+	Description: help.D(_manga),
 
 	Commands: []*Z.Cmd{
 		mangaListCmd,
@@ -112,13 +111,13 @@ var mangaCmd = &Z.Cmd{
 }
 
 var mangaListCmd = &Z.Cmd{
-	Name:      `list`,
-	Usage:     `[help]`,
-	Version:   `v0.0.1`,
-	Copyright: `Copyright Micah Nadler 2023`,
-	License:   `Apache-2.0`,
-	// Summary:     help.S(_mangaList),
-	// Description:  help.D(_mangaList),
+	Name:        `list`,
+	Usage:       `[help]`,
+	Version:     `v0.0.1`,
+	Copyright:   `Copyright Micah Nadler 2023`,
+	License:     `Apache-2.0`,
+	Summary:     help.S(_mangaList),
+	Description: help.D(_mangaList),
 
 	Commands: []*Z.Cmd{help.Cmd},
 
@@ -129,13 +128,13 @@ var mangaListCmd = &Z.Cmd{
 }
 
 var mangaPlanCmd = &Z.Cmd{
-	Name:      `plan`,
-	Usage:     `[help]`,
-	Version:   `v0.0.1`,
-	Copyright: `Copyright Micah Nadler 2023`,
-	License:   `Apache-2.0`,
-	// Summary:     help.S(_mangaPlan),
-	// Description:  help.D(_mangaPlan),
+	Name:        `plan`,
+	Usage:       `[help]`,
+	Version:     `v0.0.1`,
+	Copyright:   `Copyright Micah Nadler 2023`,
+	License:     `Apache-2.0`,
+	Summary:     help.S(_mangaPlan),
+	Description: help.D(_mangaPlan),
 
 	Commands: []*Z.Cmd{help.Cmd},
 
@@ -146,13 +145,13 @@ var mangaPlanCmd = &Z.Cmd{
 }
 
 var mangaDoneCmd = &Z.Cmd{
-	Name:      `done`,
-	Usage:     `[help]`,
-	Version:   `v0.0.1`,
-	Copyright: `Copyright Micah Nadler 2023`,
-	License:   `Apache-2.0`,
-	// Summary:     help.S(_mangaDone),
-	// Description:  help.D(_mangaDone),
+	Name:        `done`,
+	Usage:       `[help]`,
+	Version:     `v0.0.1`,
+	Copyright:   `Copyright Micah Nadler 2023`,
+	License:     `Apache-2.0`,
+	Summary:     help.S(_mangaDone),
+	Description: help.D(_mangaDone),
 
 	Commands: []*Z.Cmd{help.Cmd},
 
