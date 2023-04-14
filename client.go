@@ -103,7 +103,7 @@ func (c *client) userAnimeListWatching(ctx context.Context) {
 				return ""
 			}
 
-			syn, _ := to.Wrapped(anime[i].Anime.Synopsis, 72)
+			syn, _ := to.Wrapped(anime[i].Anime.Synopsis, 50)
 			episodeCount := "👀 Watched: " + to.String(anime[i].Anime.MyListStatus.NumEpisodesWatched) + "/" + to.String(anime[i].Anime.NumEpisodes)
 
 			return fmt.Sprintf("📺  %s\n%s\n%s\n\nSynopsis:\n%v\n",
