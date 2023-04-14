@@ -203,10 +203,10 @@ func (c *client) userMangaList(ctx context.Context) {
 		return
 	}
 	manga, _, err := c.User.MangaList(ctx, "@me",
+		mal.MangaStatusReading,
 		mal.SortMangaListByListUpdatedAt,
-		mal.Fields{"my_list_status{comments}"},
+		mal.Fields{"list_status", "synopsis", "my_list_status{comments}"},
 		mal.Limit(100),
-		mal.Offset(0),
 	)
 	if err != nil {
 		c.err = err
@@ -221,10 +221,12 @@ func (c *client) userMangaList(ctx context.Context) {
 			if i == -1 {
 				return ""
 			}
+			readCount := "📖 Chapters Read: " + to.String(manga[i].Manga.MyListStatus.NumChaptersRead)
 			syn, _ := to.Wrapped(manga[i].Manga.Synopsis, 72)
-			return fmt.Sprintf("%s\n%s\n\n%s\n",
+			return fmt.Sprintf("%s\n%s\n%s\n\n%s\n",
 				manga[i].Manga.Title,
 				manga[i].Manga.MyListStatus.Comments,
+				readCount,
 				syn)
 		}))
 	if err != nil {
