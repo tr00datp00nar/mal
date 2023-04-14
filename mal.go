@@ -115,3 +115,57 @@ func runMangaList() error {
 
 	return c.showcaseMangaList(ctx)
 }
+
+func runMangaListPlan() error {
+	config, err := LoadConfigFile()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var (
+		clientID     = flag.String("client-id", config.ClientId, "your registered MyAnimeList.net application client ID")
+		clientSecret = flag.String("client-secret", config.ClientSecret, "your registered MyAnimeList.net application client secret; optional if you chose App Type 'other'")
+		state        = flag.String("state", "", "token to protect against CSRF attacks")
+	)
+	flag.Parse()
+
+	ctx := context.Background()
+
+	tokenClient, err := authenticate(ctx, *clientID, *clientSecret, *state)
+	if err != nil {
+		return err
+	}
+
+	c := client{
+		Client: mal.NewClient(tokenClient),
+	}
+
+	return c.showcaseMangaListPlan(ctx)
+}
+
+func runMangaListDone() error {
+	config, err := LoadConfigFile()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var (
+		clientID     = flag.String("client-id", config.ClientId, "your registered MyAnimeList.net application client ID")
+		clientSecret = flag.String("client-secret", config.ClientSecret, "your registered MyAnimeList.net application client secret; optional if you chose App Type 'other'")
+		state        = flag.String("state", "", "token to protect against CSRF attacks")
+	)
+	flag.Parse()
+
+	ctx := context.Background()
+
+	tokenClient, err := authenticate(ctx, *clientID, *clientSecret, *state)
+	if err != nil {
+		return err
+	}
+
+	c := client{
+		Client: mal.NewClient(tokenClient),
+	}
+
+	return c.showcaseMangaListDone(ctx)
+}
