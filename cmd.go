@@ -3,6 +3,7 @@ package mal
 import (
 	Z "github.com/rwxrob/bonzai/z"
 	"github.com/rwxrob/help"
+	"github.com/tr00datp00nar/animerecommender"
 )
 
 var Cmd = &Z.Cmd{
@@ -36,6 +37,7 @@ var animeCmd = &Z.Cmd{
 		animeDoneCmd,
 		animeListCmd,
 		animePlanCmd,
+		animerecommender.Cmd,
 		help.Cmd,
 	},
 }
