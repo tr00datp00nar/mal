@@ -365,7 +365,7 @@ var mangaListCmd = &Z.Cmd{
 					status = "🔖 Complete"
 				}
 
-				syn, _ := to.Wrapped(manga[i].Manga.Synopsis, (w/2)-5)
+				syn, _ := to.Wrapped(manga[i].Manga.Synopsis, 72)
 				return fmt.Sprintf("%s\n%s\n%s\n\n%s\n",
 					title,
 					status,
@@ -411,37 +411,19 @@ var mangaPlanCmd = &Z.Cmd{
 				if i == -1 {
 					return ""
 				}
-
 				var title string
 				origTitle := manga[i].Manga.Title
 				engTitle := manga[i].Manga.AlternativeTitles.English
 				if engTitle == "" {
-					title = "📘 " + origTitle
+					title = origTitle
 				} else {
-					title = "📘 " + engTitle
+					title = engTitle
 				}
 
-				var readCount string
-				if manga[i].Manga.NumChapters == 0 {
-					readCount = "🔎 Chapters Read: " + to.String(manga[i].Manga.MyListStatus.NumChaptersRead) + "/" + "?"
-				} else {
-					readCount = "🔎 Chapters Read: " + to.String(manga[i].Manga.MyListStatus.NumChaptersRead) + "/" + to.String(manga[i].Manga.NumChapters)
-				}
-
-				var status string
-				s := manga[i].Manga.Status
-				if s == "currently_publishing" {
-					status = "🔖 Ongoing"
-				}
-				if s == "finished" {
-					status = "🔖 Complete"
-				}
-
-				syn, _ := to.Wrapped(manga[i].Manga.Synopsis, (w/2)-5)
-				return fmt.Sprintf("%s\n%s\n%s\n\n%s\n",
+				syn, _ := to.Wrapped(manga[i].Manga.Synopsis, 72)
+				return fmt.Sprintf("%s\n%s\n\n%s\n",
 					title,
-					status,
-					readCount,
+					manga[i].Manga.MyListStatus.Comments,
 					syn)
 			}))
 		if err != nil {
@@ -488,31 +470,22 @@ var mangaDoneCmd = &Z.Cmd{
 				origTitle := manga[i].Manga.Title
 				engTitle := manga[i].Manga.AlternativeTitles.English
 				if engTitle == "" {
-					title = "📘 " + origTitle
+					title = origTitle
 				} else {
-					title = "📘 " + engTitle
+					title = engTitle
 				}
 
 				var readCount string
 				if manga[i].Manga.NumChapters == 0 {
-					readCount = "🔎 Chapters Read: " + to.String(manga[i].Manga.MyListStatus.NumChaptersRead) + "/" + "?"
+					readCount = "📖 Chapters Read: " + to.String(manga[i].Manga.MyListStatus.NumChaptersRead) + "/" + "?"
 				} else {
-					readCount = "🔎 Chapters Read: " + to.String(manga[i].Manga.MyListStatus.NumChaptersRead) + "/" + to.String(manga[i].Manga.NumChapters)
+					readCount = "📖 Chapters Read: " + to.String(manga[i].Manga.MyListStatus.NumChaptersRead) + "/" + to.String(manga[i].Manga.NumChapters)
 				}
 
-				var status string
-				s := manga[i].Manga.Status
-				if s == "currently_publishing" {
-					status = "🔖 Ongoing"
-				}
-				if s == "finished" {
-					status = "🔖 Complete"
-				}
-
-				syn, _ := to.Wrapped(manga[i].Manga.Synopsis, (w/2)-5)
+				syn, _ := to.Wrapped(manga[i].Manga.Synopsis, 72)
 				return fmt.Sprintf("%s\n%s\n%s\n\n%s\n",
 					title,
-					status,
+					manga[i].Manga.MyListStatus.Comments,
 					readCount,
 					syn)
 			}))
@@ -524,7 +497,6 @@ var mangaDoneCmd = &Z.Cmd{
 			clipboard.WriteAll(sel)
 			fmt.Println(sel)
 		}
-
 		return nil
 	},
 }
