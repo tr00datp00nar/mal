@@ -12,9 +12,14 @@ import (
 	"github.com/spf13/viper"
 )
 
+type MalConfig struct {
+	ClientId     string `yaml:"mal.client_id"`
+	ClientSecret string `yaml:"mal.client_secret"`
+}
+
 var (
 	userHomeDir, _ = os.UserHomeDir()
-	cacheDir       = filepath.Join(userHomeDir, ".config/mal")
+	cacheDir       = filepath.Join(userHomeDir, ".config/c")
 	cacheName      = filepath.Join(cacheDir, "/mal-token-cache.txt")
 
 	nagatoClient *nagato.Client
@@ -24,11 +29,6 @@ var (
 	clientSecret = config.ClientSecret
 	state        = ""
 )
-
-type MalConfig struct {
-	ClientId     string `yaml:"mal.client_id"`
-	ClientSecret string `yaml:"mal.client_secret"`
-}
 
 func LoadConfigFile() (config MalConfig, err error) {
 	viper.SetConfigName("config")
